@@ -1,39 +1,29 @@
-import java.util.Scanner;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        UserDAO dao = new UserDAO();
+import java.io.IOException;
 
-        System.out.println("1 - Cadastrar");
-        System.out.println("2 - Login");
-        int op = sc.nextInt();
-        sc.nextLine();
+@WebServlet("/login") // bate com o action do HTML
+public class Main extends HttpServlet {
 
-        if (op == 1) {
-            System.out.print("Nome: ");
-            String nome = sc.nextLine();
-            System.out.print("Email: ");
-            String email = sc.nextLine();
-            System.out.print("Senha: ");
-            String senha = sc.nextLine();
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-            dao.inserirUsuario(nome, email, senha);
-            System.out.println("Usuário cadastrado");
+        // pega os dados do formulário
+        String email = request.getParameter("email");
+        String senha = request.getParameter("password");
 
-        } else if (op == 2) {
-            System.out.print("Email: ");
-            String email = sc.nextLine();
-            System.out.print("Senha: ");
-            String senha = sc.nextLine();
+        // só pra testar no console
+        System.out.println("Email: " + email + ", Senha: " + senha);
 
-            if (dao.login(email, senha)) {
-                System.out.println("Login OK");
-            } else {
-                System.out.println("Credenciais inválidas");
-            }
-        }
-
-        sc.close();
+        // resposta pro usuário
+        response.setContentType("text/html");
+        response.getWriter().println("<h1>Login Recebido!</h1>");
+        response.getWriter().println("<p>Email: " + email + "</p>");
+        response.getWriter().println("<p>Senha: " + senha + "</p>");
     }
 }
